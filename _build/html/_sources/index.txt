@@ -11,7 +11,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-.. automodule:: gapR
+.. automodule:: genGapRDataset
 
 Indices and tables
 ==================

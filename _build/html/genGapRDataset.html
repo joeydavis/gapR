@@ -1,0 +1,232 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>genGapRDataset Module &mdash; gapR 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="gapR 0.1 documentation" href="index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="index.html"><img src="_static/logo.png" border="0" alt="qMSClustering"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+	<li><a href="contents.html">documentation </a> &raquo;</li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">genGapRDataset Module</a><ul>
+<li><a class="reference internal" href="#id1"><tt class="docutils literal"><span class="pre">genGapRDataset</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/genGapRDataset.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="gengaprdataset-module">
+<h1>genGapRDataset Module<a class="headerlink" href="#gengaprdataset-module" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2><a class="reference internal" href="#module-genGapRDataset" title="genGapRDataset"><tt class="xref py py-mod docutils literal"><span class="pre">genGapRDataset</span></tt></a> Module<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-genGapRDataset"></span><p>Created on Sat Mar 23 05:08:20 2013</p>
+<p>&#64;author: Joey Davis : <a class="reference external" href="mailto:jhdavis&#37;&#52;&#48;scripps&#46;edu">jhdavis<span>&#64;</span>scripps<span>&#46;</span>edu</a></p>
+<dl class="function">
+<dt id="genGapRDataset.getNorm">
+<tt class="descclassname">genGapRDataset.</tt><tt class="descname">getNorm</tt><big>(</big><em>u</em>, <em>s=None</em><big>)</big><a class="reference internal" href="_modules/genGapRDataset.html#getNorm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#genGapRDataset.getNorm" title="Permalink to this definition">¶</a></dt>
+<dd><p>getNorm returns an integer sample from a nomral distribution centered at u with a std. dev. of s</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>u</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; center of the distribution</li>
+<li><strong>s</strong> &#8211; the std. dev. of the distribution
+Defaults to u if no std. dev. given</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">an integer sampled from the normal distribution centered at u (std. dev. of u by default).
+If the chosen number is negative, 1 is returned.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="genGapRDataset.initCenter">
+<tt class="descclassname">genGapRDataset.</tt><tt class="descname">initCenter</tt><big>(</big><em>center=[50, 50], inSpread=50, r=0, numPoints=5, maxPoints=10, probContinue=0.5, fracContinueDrop=0.5</em><big>)</big><a class="reference internal" href="_modules/genGapRDataset.html#initCenter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#genGapRDataset.initCenter" title="Permalink to this definition">¶</a></dt>
+<dd><p>initCenter is a recursive function that creates new centers for points to be generated at</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>center</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; The [x,y] location of the center of the points to be distributed about
+Of the form [x,y]; defaults to [50,50]</li>
+<li><strong>inSpread</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; How wide points should be spread about the center
+Defaults to 50</li>
+<li><strong>r</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; a recursion counter to track how deep you&#8217;ve recursed
+Defaults to 0</li>
+<li><strong>numPoints</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The average number of centers/points to generate (real number sampled from a normal dist with u=s=numPoints)
+Defaults to 5</li>
+<li><strong>maxPoints</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The maximum number of points to be generated
+Defaults to 10</li>
+<li><strong>probContinue</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The probability that the points will be new centers
+(another round of recursion) instead of new points
+Defaults to 0.5</li>
+<li><strong>fracContinueDrop</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; The factor by which the probContinue parameter will be dropped 
+if another round of recursion is called
+Defaults to 0.5</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a list of lists, each element of the form [x,y,color,recursionLevel]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="genGapRDataset.makePoints">
+<tt class="descclassname">genGapRDataset.</tt><tt class="descname">makePoints</tt><big>(</big><em>numPoints=4, center=[50, 50], spread=50, r=0, ps=0</em><big>)</big><a class="reference internal" href="_modules/genGapRDataset.html#makePoints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#genGapRDataset.makePoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>makePoints is a helper function, it returns a list of points sampled uniformaly parameters described below.
+NOTE: makePoints updates a global variable COLOR, which is used to keep track of which points were generated together</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>numPoints</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; The number of points to be generated</li>
+<li><strong>center</strong> &#8211; The center of the distribution of points</li>
+<li><strong>spread</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; the size of the uniform distribution (each point defined as center+random (0-1)*spread)</li>
+<li><strong>r</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; the current recursion depth when the points are made</li>
+<li><strong>ps</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; this parameter defines whether COLOR will be updated (the value should only be 1 if you are actually making points,
+if you are simply using the function to define new centers, ps should be set to 0)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a list of lists, each element of the form [x,y,color,recursionLevel]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="genGapRDataset.plotPoints">
+<tt class="descclassname">genGapRDataset.</tt><tt class="descname">plotPoints</tt><big>(</big><em>dataPoints</em>, <em>f</em>, <em>sizeScalar=75</em><big>)</big><a class="reference internal" href="_modules/genGapRDataset.html#plotPoints"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#genGapRDataset.plotPoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a 2D scatter plot of the points given in dataPoints</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dataPoints</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#list" title="(in Python v2.7)"><em>list</em></a>) &#8211; A list of lists. Each element is of the form:
+[xCoord, yCoord, color, size]</li>
+<li><strong>f</strong> (<em>pylab.figure()</em>) &#8211; A figure to modify</li>
+<li><strong>sizeScalar</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; An int of the minimum dot size (also the scale for each level of recursion)
+Defaults to 75</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The modified figure</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+	<li><a href="contents.html">documentation </a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Joey Davis, Josh Silverman.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,251 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>genGapRDataset &mdash; gapR 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="gapR 0.1 documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+<a href="../index.html"><img src="../_static/logo.png" border="0" alt="qMSClustering"/></a>
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+	<li><a href="../contents.html">documentation </a> &raquo;</li>
+
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for genGapRDataset</h1><div class="highlight"><pre>
+<span class="c"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Sat Mar 23 05:08:20 2013</span>
+
+<span class="sd">@author: Joey Davis : jhdavis@scripps.edu</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">scipy</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">pylab</span>
+
+
+<div class="viewcode-block" id="makePoints"><a class="viewcode-back" href="../genGapRDataset.html#genGapRDataset.makePoints">[docs]</a><span class="k">def</span> <span class="nf">makePoints</span><span class="p">(</span><span class="n">numPoints</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="p">[</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">],</span> <span class="n">spread</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ps</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;makePoints is a helper function, it returns a list of points sampled uniformaly parameters described below.</span>
+<span class="sd">        NOTE: makePoints updates a global variable COLOR, which is used to keep track of which points were generated together</span>
+
+<span class="sd">    :param numPoints: The number of points to be generated</span>
+<span class="sd">    :type numPoints: int</span>
+<span class="sd">    :param center: The center of the distribution of points</span>
+<span class="sd">    :type b: array (2D by default listed [x,y])</span>
+<span class="sd">    :param spread: the size of the uniform distribution (each point defined as center+random (0-1)*spread)</span>
+<span class="sd">    :type spread: float</span>
+<span class="sd">    :param r: the current recursion depth when the points are made</span>
+<span class="sd">    :type r: int</span>
+<span class="sd">    :param ps: this parameter defines whether COLOR will be updated (the value should only be 1 if you are actually making points,</span>
+<span class="sd">        if you are simply using the function to define new centers, ps should be set to 0)</span>
+<span class="sd">    :type ps: int</span>
+<span class="sd">    :returns:  a list of lists, each element of the form [x,y,color,recursionLevel]</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">COLOR</span>    
+    <span class="n">COLOR</span> <span class="o">=</span> <span class="n">COLOR</span><span class="o">+</span><span class="n">ps</span>
+    <span class="k">return</span> <span class="p">[[</span><span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spread</span><span class="p">,</span> <span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">spread</span><span class="p">,</span> <span class="n">COLOR</span><span class="p">,</span> <span class="n">r</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">numPoints</span><span class="p">)]</span>
+</div>
+<div class="viewcode-block" id="initCenter"><a class="viewcode-back" href="../genGapRDataset.html#genGapRDataset.initCenter">[docs]</a><span class="k">def</span> <span class="nf">initCenter</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="p">[</span><span class="mi">50</span><span class="p">,</span><span class="mi">50</span><span class="p">],</span> <span class="n">inSpread</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numPoints</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">maxPoints</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">probContinue</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">fracContinueDrop</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;initCenter is a recursive function that creates new centers for points to be generated at</span>
+
+<span class="sd">    :param center: The [x,y] location of the center of the points to be distributed about</span>
+<span class="sd">        Of the form [x,y]; defaults to [50,50]</span>
+<span class="sd">    :type center: list</span>
+<span class="sd">    :param inSpread: How wide points should be spread about the center</span>
+<span class="sd">        Defaults to 50</span>
+<span class="sd">    :type inSpread: float </span>
+<span class="sd">    :param r: a recursion counter to track how deep you&#39;ve recursed</span>
+<span class="sd">        Defaults to 0</span>
+<span class="sd">    :type r: int</span>
+<span class="sd">    :param numPoints: The average number of centers/points to generate (real number sampled from a normal dist with u=s=numPoints)</span>
+<span class="sd">        Defaults to 5</span>
+<span class="sd">    :type numPoints: int</span>
+<span class="sd">    :param maxPoints: The maximum number of points to be generated</span>
+<span class="sd">        Defaults to 10</span>
+<span class="sd">    :type maxPoints: int</span>
+<span class="sd">    :param probContinue: The probability that the points will be new centers</span>
+<span class="sd">        (another round of recursion) instead of new points</span>
+<span class="sd">        Defaults to 0.5</span>
+<span class="sd">    :type probContinue: float</span>
+<span class="sd">    :param fracContinueDrop: The factor by which the probContinue parameter will be dropped </span>
+<span class="sd">        if another round of recursion is called</span>
+<span class="sd">        Defaults to 0.5</span>
+<span class="sd">    :type fracContinueDrop: float</span>
+<span class="sd">    :returns:  a list of lists, each element of the form [x,y,color,recursionLevel]</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">guess</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">guess</span> <span class="o">&gt;</span> <span class="nb">float</span><span class="p">(</span><span class="n">probContinue</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">makePoints</span><span class="p">(</span><span class="n">numPoints</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">getNorm</span><span class="p">(</span><span class="n">numPoints</span><span class="p">),</span><span class="n">maxPoints</span><span class="p">),</span> <span class="n">center</span><span class="o">=</span><span class="n">center</span><span class="p">,</span> <span class="n">spread</span><span class="o">=</span><span class="n">inSpread</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">ps</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">newCents</span> <span class="o">=</span> <span class="n">makePoints</span><span class="p">(</span><span class="n">numPoints</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">getNorm</span><span class="p">(</span><span class="n">numPoints</span><span class="p">),</span><span class="n">maxPoints</span><span class="p">),</span> <span class="n">center</span><span class="o">=</span><span class="n">center</span><span class="p">,</span> <span class="n">spread</span><span class="o">=</span><span class="n">inSpread</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="p">,</span> <span class="n">ps</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">allPoints</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">newCents</span><span class="p">:</span>
+            <span class="n">hold</span> <span class="o">=</span> <span class="n">initCenter</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">inSpread</span><span class="o">=</span><span class="n">inSpread</span><span class="o">/</span><span class="mi">10</span><span class="p">,</span> <span class="n">probContinue</span><span class="o">=</span><span class="n">probContinue</span><span class="o">*</span><span class="n">fracContinueDrop</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">numPoints</span><span class="o">=</span><span class="n">numPoints</span><span class="p">,</span> <span class="n">maxPoints</span><span class="o">=</span><span class="n">maxPoints</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">hold</span><span class="p">:</span>
+                <span class="n">allPoints</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">allPoints</span>
+</div>
+<div class="viewcode-block" id="getNorm"><a class="viewcode-back" href="../genGapRDataset.html#genGapRDataset.getNorm">[docs]</a><span class="k">def</span> <span class="nf">getNorm</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;getNorm returns an integer sample from a nomral distribution centered at u with a std. dev. of s</span>
+
+<span class="sd">    :param u: center of the distribution</span>
+<span class="sd">    :type u: int</span>
+<span class="sd">    :param s: the std. dev. of the distribution</span>
+<span class="sd">        Defaults to u if no std. dev. given</span>
+<span class="sd">    :type u: int</span>
+<span class="sd">    :returns:  an integer sampled from the normal distribution centered at u (std. dev. of u by default).</span>
+<span class="sd">        If the chosen number is negative, 1 is returned.</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">s</span><span class="p">))),</span><span class="mi">1</span><span class="p">])</span>
+</div>
+<div class="viewcode-block" id="plotPoints"><a class="viewcode-back" href="../genGapRDataset.html#genGapRDataset.plotPoints">[docs]</a><span class="k">def</span> <span class="nf">plotPoints</span><span class="p">(</span><span class="n">dataPoints</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">sizeScalar</span><span class="o">=</span><span class="mi">75</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Generates a 2D scatter plot of the points given in dataPoints</span>
+
+<span class="sd">    :param dataPoints: A list of lists. Each element is of the form:</span>
+<span class="sd">        [xCoord, yCoord, color, size]</span>
+<span class="sd">    :type dataPoints: list</span>
+<span class="sd">    :param f: A figure to modify</span>
+<span class="sd">    :type f: pylab.figure()</span>
+<span class="sd">    :param sizeScalar: An int of the minimum dot size (also the scale for each level of recursion)</span>
+<span class="sd">        Defaults to 75</span>
+<span class="sd">    :type sizeScalar: int</span>
+<span class="sd">    :returns:  The modified figure</span>
+<span class="sd">        </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dataPoints</span><span class="p">]</span>
+    <span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dataPoints</span><span class="p">]</span>
+    <span class="n">cs</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dataPoints</span><span class="p">]</span>
+    <span class="n">rs</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">dataPoints</span><span class="p">]</span>
+
+    <span class="n">rsf</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mi">75</span><span class="o">+</span><span class="mi">75</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">rs</span><span class="p">]</span>
+
+    <span class="n">maxPoints</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">cs</span><span class="p">))</span>
+    <span class="n">csf</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">/</span><span class="n">maxPoints</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">cs</span><span class="p">]</span>
+    
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">csf</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">rsf</span><span class="p">)</span><span class="o">-</span><span class="n">i</span><span class="o">+</span><span class="mi">75</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">rsf</span><span class="p">])</span>
+
+    <span class="k">for</span> <span class="n">l_creationRound</span><span class="p">,</span> <span class="n">l_recursionLevel</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">cs</span><span class="p">,</span> <span class="n">rs</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">l_creationRound</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">l_recursionLevel</span><span class="p">),</span>
+            <span class="n">xy</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="n">xytext</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+            <span class="n">textcoords</span> <span class="o">=</span> <span class="s">&#39;offset points&#39;</span><span class="p">,</span> <span class="n">ha</span> <span class="o">=</span> <span class="s">&#39;right&#39;</span><span class="p">,</span> <span class="n">va</span> <span class="o">=</span> <span class="s">&#39;bottom&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;dim 1&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;dim 2&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">&#39;Randomly generated points: labels = group:recursion depth&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">f</span></div>
+<span class="sd">&quot;&quot;&quot;#################Sample Execution Code###############</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="k">global</span> <span class="n">COLOR</span>
+<span class="n">figArray</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">5</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">COLOR</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">dataPoints</span> <span class="o">=</span> <span class="n">initCenter</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">,</span><span class="mi">100</span><span class="p">],</span> <span class="n">inSpread</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">numPoints</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">maxPoints</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">probContinue</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">fracContinueDrop</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">pylab</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">plotPoints</span><span class="p">(</span><span class="n">dataPoints</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+    <span class="n">figArray</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">,</span> <span class="n">dataPoints</span><span class="p">]</span>
+
+<span class="n">pylab</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="s">&#39;all&#39;</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">home</a>|&nbsp;</li>
+        <li><a href="../search.html">search</a>|&nbsp;</li>
+	<li><a href="../contents.html">documentation </a> &raquo;</li>
+
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Joey Davis, Josh Silverman.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
