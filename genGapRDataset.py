@@ -6,11 +6,12 @@ Created on Sat Mar 23 05:08:20 2013
 """
 
 import numpy
-import scipy
-import matplotlib
 import math
 import random
 import pylab
+import scipy.spatial.distance as ssd
+import scipy.cluster.hierarchy as sch
+import jhdavisVizLib
 
 
 def makePoints(numPoints=4, center=[50,50], spread=50, r=0, ps=0):
@@ -64,8 +65,7 @@ def initCenter(center=[50,50], inSpread=50, r=0, numPoints=5, maxPoints=10, prob
     :returns:  a list of lists, each element of the form [x,y,color,recursionLevel]
     
     """
-    guess = float(random.random())
-    if guess > float(probContinue):
+    if float(random.random()) > float(probContinue):
         return makePoints(numPoints=min(getNorm(numPoints),maxPoints), center=center, spread=inSpread, r=r, ps=1)
         
     else:
@@ -130,15 +130,85 @@ def plotPoints(dataPoints, f, sizeScalar=75):
     ax.set_ylabel('dim 2', fontsize=12)
     ax.set_title('Randomly generated points: labels = group:recursion depth')
     return f
+
+def clusterPoints(xdata, method='ward', metric='euclidean'):
+    """clusterPoints clusters the data by row
+
+    :param xdata: a data dictionary - the one to be transformed
+    :type x: dict, must contain 'data', 'ls', 'dimensions'
+    :param method: string defining the linkage type, defaults to 'ward' - 'average' might be a good option
+    :type method: string
+    :param metric: string defining the distance metric, defaults to 'euclidean'
+    :type metric: string
+    :returns:  a data ditionary. 'data', 'ls', 'dimensions', 'di', 'li', 'leftDendro' is updated
+
+    """
+        
+    xdat = xdata.copy()
+    x = xdat['data']
+    ind1 = xdat['ls']
+
+    xt = x
+    idx1 = None
+    
+    toReturn = xdat
+    Y1 = None
+    
+    d1 = ssd.pdist(x)
+    D1 = ssd.squareform(d1)  # full matrix
+    Y1 = sch.linkage(D1, method=method, metric=metric) ### gene-clustering metric - 'average', 'single', 'centroid', 'complete'
+    Z1 = sch.dendrogram(Y1, no_plot=True, orientation='right')
+    idx1 = Z1['leaves'] ### apply the clustering for the gene-dendrograms to the actual matrix data
+    xt = xt[idx1,:]   # xt gets transformed based on the indecies in idx1
+    newIndex = []
+    for i in idx1:
+        newIndex.append(ind1[i])
+    toReturn['ls'] = newIndex
+    toReturn['li'] = idx1
+    toReturn['data'] = xt
+    Y1[:,2] = [plog(x) for x in Y1[:,2]]
+    Y1[:,2] = offset(Y1[:,2])
+    toReturn['rightDendro'] = Y1
+    return toReturn
+
+def plog(x):
+    return math.log(x+0.1,2)
+    
+def offset(x):
+    s = min(x)
+    return [i + abs(s) for i in x]
+
+def makeDataDict(dat):
+    """makeDataDict makes a clusterable dataDictionary given a dataPoints list of lists
+
+    :param dat: a dataPoints list of lists, in the expected form [x,y,color,recursionLevel]
+    :type dat: list, expected form : [x,y,color,recursionLevel]
+    :returns:  a data ditionary. 'data', 'ls', 'dimensions', 'di', 'li', 'leftDendro', where ls is a list of the form [color, recursionLevel]
+
+    """
+    
+    toReturn = dict()
+    toReturn['leftDendro'] = None
+    toReturn['dimensions'] = ['x', 'y']
+    toReturn['di'] = None
+    toReturn['ls'] = []
+    toReturn['data'] = []
+    toReturn['data'] = numpy.array([[row[0], row[1]] for row in dat])
+    toReturn['ls'] = numpy.array([[row[2], row[3]] for row in dat])
+    return toReturn
+
 """#################Sample Execution Code###############
 """
 global COLOR
 figArray = [0]*5
-for i in xrange(5):
+for i in xrange(1):
     COLOR = 0
-    dataPoints = initCenter(center=[100,100], inSpread=1000, r=0, numPoints=4, maxPoints=10, probContinue=1, fracContinueDrop=0.8)
+    dataPoints = initCenter(center=[100,100], inSpread=1000, r=0, numPoints=3, maxPoints=5, probContinue=1, fracContinueDrop=0.8)
+    dd = makeDataDict(dataPoints)
+    clusteredData = clusterPoints(dd)
     f = pylab.figure()
     f = plotPoints(dataPoints, f)
     figArray[i] = [f, dataPoints]
-
+    cluteredMap = jhdavisVizLib.drawHeatMap(clusteredData, "clusteredMap", dendro=True)
+print dataPoints
 pylab.show('all')
